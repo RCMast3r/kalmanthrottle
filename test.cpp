@@ -49,10 +49,18 @@ float SimpleKalmanFilter::getKalmanGain() {
 float SimpleKalmanFilter::getEstimateError() {
   return _err_estimate;
 }
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
 int main()
 {
+	ofstream out;
+	out.open("filtered.txt");
+	srand(time(0)); 
 	//tune these 3 values
-	SimpleKalmanFilter yyy = SimpleKalmanFilter(.01, .02, .1);
+	SimpleKalmanFilter yyy = SimpleKalmanFilter(.04, .04, .085);
 	
 	ifstream in("test.txt");
 	vector<double> yeet;
@@ -69,16 +77,24 @@ int main()
 
 	double test;
 	int i =0;
-	float estimated_value;
+	double estimated_value;
 	while(in>>test){
 		i++;
 		yeet.push_back(test);
-		float measured_value = test + (rand()%1)/1;
+		double measured_value = test;
 		//the estimated value is being updated every 5 measurements here
 
 
 		if((i%5)==0){
-			estimated_value = yyy.updateEstimate(measured_value);
+			
+			double test = yyy.updateEstimate(measured_value);
+			if(test<=1 && test>.001){
+				estimated_value=test;
+			}
+			else{
+				estimated_value=estimated_value;
+			}
+			
 		}
 
 
@@ -87,9 +103,11 @@ int main()
 			estimated_value=estimated_value;
 		}
 		yeet3.push_back(estimated_value);
+		//out<<estimated_value<<"\n";
 		//cout<<test<<"\n";	
 	}
 	in.close();
+	out.close();
 	//system("pause");
 
 	
