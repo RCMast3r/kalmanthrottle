@@ -9,7 +9,7 @@
 using namespace std;
 
 namespace plt = matplotlibcpp;
-
+_last_estimate=0;
 SimpleKalmanFilter::SimpleKalmanFilter(float mea_e, float est_e, float q)
 {
   _err_measure=mea_e;
